@@ -22,7 +22,6 @@ model User {
 
 model Chat {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
   body      String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String   @db.ObjectId

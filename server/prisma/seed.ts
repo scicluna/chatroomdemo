@@ -10,7 +10,6 @@ async function main() {
             username: 'testuser',
             chats: {
                 create: {
-                    title: 'My First Chat',
                     body: 'This is the first chat I created.',
                 },
             },
