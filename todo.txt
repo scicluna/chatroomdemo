@@ -1,0 +1,10 @@
+google/github auth - done?
+
+clean ui for chat
+ability to post chats
+
+chat refreshses whenever a new post is made (websocket)
+
+
+
+
