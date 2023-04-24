@@ -1,5 +1,10 @@
 import { io } from "socket.io-client";
 
-const socket = io(`${window.location.protocol}//${window.location.host}`);
+const isProduction = process.env.NODE_ENV === "production";
+const socketURL = isProduction
+    ? "wss://voidchat.herokuapp.com"
+    : "ws://localhost:3001";
+
+const socket = io(socketURL);
 
 export default socket;
