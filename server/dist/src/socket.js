@@ -1,9 +1,11 @@
 import http from 'http';
 import { Server } from 'socket.io';
+const isProduction = process.env.NODE_ENV === "production";
+const clientURL = isProduction ? "https://voidchat.herokuapp.com/" : "http://localhost:3000";
 const server = http.createServer();
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: clientURL,
         methods: ["GET", "POST"]
     }
 });
@@ -19,7 +21,8 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
     });
 });
-server.listen(3001, () => {
-    console.log('Socket server listening on *:3001');
+const port = process.env.PORT || 3001;
+server.listen(port, () => {
+    console.log(`Socket server listening on *:${port}`);
 });
 //# sourceMappingURL=socket.js.map

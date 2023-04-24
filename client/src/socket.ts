@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3001"); // Replace with your socket server URL
+const socket = io(`${window.location.protocol}//${window.location.host}`);
 
 export default socket;
