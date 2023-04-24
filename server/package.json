@@ -9,8 +9,7 @@
     "watch": "tsc --watch",
     "serve": "nodemon ./dist/src/index.js",
     "dev": "concurrently \"npm run watch\" \"npm run serve\"",
-    "seed": "node ./dist/prisma/seed.js",
-    "heroku-postbuild": "prisma generate"
+    "seed": "node ./dist/prisma/seed.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
