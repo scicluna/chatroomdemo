@@ -15,3 +15,18 @@ type UserContextValue = {
     user: User | null;
     setUser: (user: User | null) => void;
 };
+
+type Chat = {
+    author: {
+        email: string,
+        githubId: string,
+        googleId: string,
+        id: string,
+        signedUp: string,
+        username: string,
+    }
+    authorId: string;
+    body: string;
+    createdAt: string;
+    id: string;
+}

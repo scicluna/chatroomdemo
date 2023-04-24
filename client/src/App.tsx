@@ -5,22 +5,22 @@ import LoginScreen from "./components/LoginScreen";
 
 export default function App() {
 
-  //const { user } = useUser();
+  const { user } = useUser();
 
   return (
     <>
-      {/* {user ? ( */}
-      <>
-        <div className="flex flex-col h-screen w-screen">
-          <Navbar />
-          <Chatroom />
+      {user ? (
+        <>
+          <div className="flex flex-col h-screen w-screen">
+            <Navbar />
+            <Chatroom />
+          </div>
+        </>
+      ) : (
+        <div>
+          <LoginScreen />
         </div>
-      </>
-      {/* ) : ( */}
-      {/* <div>
-        <LoginScreen />
-      </div> */}
-      {/* )} */}
+      )}
     </>
   )
 }
