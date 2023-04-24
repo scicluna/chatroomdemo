@@ -4,6 +4,11 @@ import cors from "cors";
 import passport from "passport";
 import "./passport-setup.js";
 
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const port = process.env.PORT || 3000;
 
@@ -25,6 +30,7 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, '../../../client/dist')));
 
 // Add routes for Google and GitHub authentication
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
@@ -43,7 +49,7 @@ app.get("/auth/github/callback", passport.authenticate("github"), (_req, res) =>
 
 
 app.get("/", (_req, res) => {
-    res.send("Hello, World!");
+    res.sendFile(path.join(__dirname, '../../../client/dist/index.html'));
 });
 
 app.post("/api/user", async (req, res) => {
