@@ -33,10 +33,10 @@ export default function MessageBar() {
     }
 
     return (
-        <div>
-            <form>
-                <input ref={message} type="text" />
-                <button type="submit" onClick={postMessage}>POST</button>
+        <div className="bg-zinc-900 w-screen p-3">
+            <form className="w-full flex justify-center">
+                <input className="w-5/6 bg-zinc-500 opacity-50" ref={message} type="text" />
+                <button className=" text-lime-500 hover:text-lime-200 ml-2" type="submit" onClick={postMessage}>POST</button>
             </form>
         </div>
     )

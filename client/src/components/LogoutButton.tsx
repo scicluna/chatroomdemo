@@ -12,6 +12,6 @@ export default function LogoutButton() {
 
 
     return (
-        <button onClick={handleLogout}>Logout</button>
+        <button className="text-lime-500 hover:text-lime-200" onClick={handleLogout}>Logout</button>
     )
 }

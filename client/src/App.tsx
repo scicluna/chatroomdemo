@@ -1,23 +1,26 @@
-import LoginButtons from "./components/LoginButtons"
-import LogoutButton from "./components/LogoutButton";
-import MessageBar from "./components/MessageBar";
 import { useUser } from "./components/UserContext";
+import Navbar from "./components/Navbar";
+import Chatroom from "./components/Chatroom";
+import LoginScreen from "./components/LoginScreen";
 
 export default function App() {
 
-  const { user } = useUser();
+  //const { user } = useUser();
 
   return (
     <>
-      {user ? (
-        <>
-          <h1>WELCOME</h1>
-          <LogoutButton />
-          <MessageBar />
-        </>
-      ) : (
-        <LoginButtons />
-      )}
+      {/* {user ? ( */}
+      <>
+        <div className="flex flex-col h-screen w-screen">
+          <Navbar />
+          <Chatroom />
+        </div>
+      </>
+      {/* ) : ( */}
+      {/* <div>
+        <LoginScreen />
+      </div> */}
+      {/* )} */}
     </>
   )
 }
