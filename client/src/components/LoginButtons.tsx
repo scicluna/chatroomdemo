@@ -7,7 +7,7 @@ export default function LoginButtons() {
     };
 
     const handleGitHubLogin = () => {
-        window.location.href = `https://voidchat.herokuapp.com/auth/github`;
+        window.location.href = `http://voidchat.herokuapp.com/auth/github`;
     };
 
     return (
