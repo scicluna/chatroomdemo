@@ -2,7 +2,8 @@ import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 let root: string;
-if (window.location.href.includes('local')) {
+console.log(window.location.hostname)
+if (window.location.hostname === 'localhost') {
     root = "http://localhost:3000"
 } else root = "https://voidchat.herokuapp.com"
 
