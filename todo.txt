@@ -1,6 +1,4 @@
-ui first draft on login/logout and chatroom
-
-chat refreshses whenever a new post is made (websocket)
+deploy
 
 ui second draft making it look crisp and clean
 
