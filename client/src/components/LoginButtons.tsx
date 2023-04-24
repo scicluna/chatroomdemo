@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 let root: string;
 if (window.location.href.includes('local')) {
     root = "http://localhost:3000"
-} else root = "https://voidchat.herokuapp.com/"
+} else root = "https://voidchat.herokuapp.com"
 
 export default function LoginButtons() {
     const handleGoogleLogin = () => {
