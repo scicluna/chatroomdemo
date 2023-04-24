@@ -15,7 +15,7 @@ export function useUser() {
 
 //fetches the current user or null
 async function fetchCurrentUser() {
-    const response = await fetch("http://localhost:3000/api/user", {
+    const response = await fetch("https://voidchat.herokuapp.com/api/user", {
         credentials: "include", // To include the session cookie
     });
 

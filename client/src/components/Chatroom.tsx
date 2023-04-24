@@ -6,7 +6,7 @@ export default function Chatroom() {
     const [chats, setChats] = useState<Chat[]>([])
 
     async function getChats() {
-        const response = await fetch("http://localhost:3000/api/chat");
+        const response = await fetch("https://voidchat.herokuapp.com/api/chat");
         if (response.status === 200) {
             const chat = await response.json();
             return chat;
