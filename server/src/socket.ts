@@ -1,10 +1,10 @@
 import http from 'http'
 import { Server } from 'socket.io'
 
+const server = http.createServer();
 const isProduction = process.env.NODE_ENV === "production";
 const clientURL = isProduction ? "https://voidchat.herokuapp.com/" : "http://localhost:3000";
 
-const server = http.createServer();
 const io = new Server(server, {
     cors: {
         origin: clientURL, // Replace with your client URL
@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     });
 });
 
-const port = process.env.PORT || 3001;
+const port = process.env.SOCKET_PORT || 3001;
 server.listen(port, () => {
     console.log(`Socket server listening on *:${port}`);
 });
