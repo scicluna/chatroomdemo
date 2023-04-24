@@ -52,6 +52,15 @@ app.get("/", (_req, res) => {
     res.sendFile(path.join(__dirname, '../../../client/dist/index.html'));
 });
 
+app.get("/api/user", (req, res) => {
+    console.log('fetch user data')
+    if (req.user) {
+        res.send(req.user);
+    } else {
+        res.status(401).send({ error: "Not authenticated" });
+    }
+});
+
 app.post("/api/user", async (req, res) => {
     try {
         const newUser = await prisma.user.create({
