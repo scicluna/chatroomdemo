@@ -75,6 +75,16 @@ app.post("/api/user", async (req, res) => {
         console.error(err);
     }
 });
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.log('Error destroying session:', err);
+            return res.status(500).send('Error logging out');
+        }
+        res.clearCookie('connect.sid');
+        res.redirect('/');
+    });
+});
 app.get("/api/chat", async (_req, res) => {
     try {
         const chats = await prisma.chat.findMany({

@@ -4,9 +4,21 @@ export default function LogoutButton() {
 
     const { user, setUser } = useUser()
 
-    function handleLogout() {
+    async function handleLogout() {
         if (user) {
-            setUser(null)
+            try {
+                const response = await fetch('/logout', {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+                if (response.ok) {
+                    setUser(null)
+                } else {
+                    console.error(response.statusText)
+                }
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
 
