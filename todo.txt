@@ -1,4 +1,5 @@
 google/github auth - done?
+make a simple front-end app with a login button to test my authenticators
 
 clean ui for chat
 ability to post chats

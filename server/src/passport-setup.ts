@@ -25,12 +25,22 @@ passport.use(
         async (_accessToken, _refreshToken, profile, done) => {
             if (!profile.emails) return new Error("Email not available from Google")
 
-            const user = await prisma.user.upsert({
-                where: { googleId: profile.id },
-                update: { googleId: profile.id, username: profile.displayName, email: profile.emails[0].value },
-                create: { googleId: profile.id, username: profile.displayName, email: profile.emails[0].value }
-            });
-            done(null, user);
+            const existingUser = await prisma.user.findUnique({ where: { email: profile.emails[0].value } });
+
+            if (existingUser) {
+                const updatedUser = await prisma.user.update({
+                    where: { id: existingUser.id },
+                    data: { googleId: profile.id },
+                });
+                done(null, updatedUser);
+            } else {
+                const user = await prisma.user.upsert({
+                    where: { googleId: profile.id },
+                    update: { googleId: profile.id, username: profile.displayName, email: profile.emails[0].value },
+                    create: { googleId: profile.id, username: profile.displayName, email: profile.emails[0].value }
+                });
+                done(null, user);
+            }
         }
     )
 )
@@ -41,16 +51,27 @@ passport.use(
             clientID: process.env.GITHUB_CLIENT_ID as string,
             clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
             callbackURL: "/auth/github/callback",
+            scope: ["user:email"]
         },
         async (_accessToken: string, _refreshToken: string, profile: GitHubProfile, done: (error: any, user?: any) => void) => {
-            if (!profile.emails) return new Error("Email not available from Github")
+            if (!profile.emails) return new Error("Email not available from GitHub");
 
-            const user = await prisma.user.upsert({
-                where: { githubId: profile.id },
-                update: { githubId: profile.id, username: profile.displayName, email: profile.emails[0].value },
-                create: { githubId: profile.id, username: profile.displayName, email: profile.emails[0].value },
-            });
-            done(null, user);
+            const existingUser = await prisma.user.findUnique({ where: { email: profile.emails[0].value } });
+
+            if (existingUser) {
+                const updatedUser = await prisma.user.update({
+                    where: { id: existingUser.id },
+                    data: { githubId: profile.id },
+                });
+                done(null, updatedUser);
+            } else {
+                const user = await prisma.user.upsert({
+                    where: { githubId: profile.id },
+                    update: { githubId: profile.id, username: profile.displayName, email: profile.emails[0].value },
+                    create: { githubId: profile.id, username: profile.displayName, email: profile.emails[0].value },
+                });
+                done(null, user);
+            }
         }
     )
 );

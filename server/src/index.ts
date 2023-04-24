@@ -1,7 +1,11 @@
 import express from "express";
 import session from "express-session";
+import cors from "cors";
 import passport from "passport";
-import "./passport-setup";
+import "./passport-setup.js";
+
+
+const port = process.env.PORT || 3000;
 
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
@@ -9,14 +13,16 @@ const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const port = process.env.PORT || 3000;
-
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+    allowedHeaders: ['Content-Type']
+}))
 app.use(session({
     secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
 }))
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -28,11 +34,11 @@ app.get("/auth/google/callback", passport.authenticate("google"), (_req, res) =>
     res.redirect("/");
 });
 
-app.get("/auth/github", passport.authenticate("github", { scope: ["profile", "email"] }));
+app.get("/auth/github", passport.authenticate("github", { scope: ["user:email"] }));
 
 app.get("/auth/github/callback", passport.authenticate("github"), (_req, res) => {
     // Redirect to your desired route after successful authentication
-    res.redirect("/");
+    res.redirect('/');
 });
 
 
