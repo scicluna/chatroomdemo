@@ -7,7 +7,7 @@
     "dev": "npm run build && cd server && npm run dev",
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
     "start": "npm run build && cd server && cd dist && cd src && node index.js",
-    "heroku-postbuild": "prisma generate"
+    "heroku-postbuild": "cd server && npx prisma generate"
   },
   "keywords": [],
   "author": "",
