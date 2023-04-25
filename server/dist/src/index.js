@@ -1,7 +1,7 @@
 import express from "express";
 import session from "express-session";
 import cors from "cors";
-import { Server } from "ws";
+import { WebSocketServer } from "ws";
 //Passport imports
 import passport from "passport";
 import "./passport-setup.js";
@@ -118,7 +118,7 @@ app.post("/api/chat", async (req, res) => {
         console.log(err);
     }
 });
-const wss = new Server({ noServer: true });
+const wss = new WebSocketServer({ noServer: true });
 // Broadcast function to send data to all connected clients
 function broadcast(data) {
     wss.clients.forEach((client) => {
