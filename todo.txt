@@ -1,4 +1,6 @@
 deploy
+actually get websockets to work. or something like it. maybe polling instead?"
+maybe websockets on another heroku deploy?
 
 ui second draft making it look crisp and clean
 

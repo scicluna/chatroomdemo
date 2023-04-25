@@ -1,6 +1,6 @@
 import MessageBar from "./MessageBar";
 import { useEffect, useState } from "react";
-// import socket from '../socket';
+import socket from '../socket';
 
 export default function Chatroom() {
     const [chats, setChats] = useState<Chat[]>([])
@@ -23,15 +23,15 @@ export default function Chatroom() {
         }
         loadChats();
 
-        // // Listen for the 'updateChats' event and update the state
-        // socket.on('updateChats', (newChat) => {
-        //     setChats((prevChats) => [...prevChats, newChat]);
-        // });
+        // Listen for the 'updateChats' event and update the state
+        socket.on('updateChats', (newChat) => {
+            setChats((prevChats) => [...prevChats, newChat]);
+        });
 
-        // // Clean up the listener when the component is unmounted
-        // return () => {
-        //     socket.off('updateChats');
-        // };
+        // Clean up the listener when the component is unmounted
+        return () => {
+            socket.off('updateChats');
+        };
     }, [])
 
     console.log(chats)
