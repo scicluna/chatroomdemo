@@ -5,6 +5,6 @@ import { io } from "socket.io-client";
 // //     ? "wss://voidchat.herokuapp.com"
 // //     : "ws://localhost:3001";
 
-const socket = io();
+const socket = io("wss://voidchat.herokuapp.com");
 
 export default socket;
