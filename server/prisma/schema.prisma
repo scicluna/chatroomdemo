@@ -12,13 +12,14 @@ datasource db {
 
 model User {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  googleId String?  @unique
-  githubId String?  @unique
+  googleId String?
+  githubId String?
   email    String   @unique
   username String
   chats    Chat[]
   signedUp DateTime @default(now())
 
+  @@unique([githubId, googleId])
   @@index([username])
 }
 

@@ -1,5 +1,8 @@
 Not sure if its working with multiple people or not tbh.
 
 ui second draft making it look crisp and clean
-
-
+    - secret scroll bar 
+    - when we're at the bottom lets follow it
+    - when we're not at the bottom lets not follow it
+    - limit fetches to like, the last 100 messages.
+    

@@ -39,6 +39,7 @@ passport.use(
                         return await prisma.user.create({
                             data: {
                                 googleId: profile.id ? profile.id : null,
+                                githubId: null,
                                 username: profile.displayName,
                                 email: userEmail,
                             },
@@ -79,7 +80,8 @@ passport.use(
                     } else {
                         return await prisma.user.create({
                             data: {
-                                githubId: profile.id,
+                                githubId: profile.id ? profile.id : null,
+                                googleId: null,
                                 username: profile.displayName,
                                 email: userEmail,
                             },
