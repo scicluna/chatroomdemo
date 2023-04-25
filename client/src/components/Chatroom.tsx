@@ -1,6 +1,5 @@
 import MessageBar from "./MessageBar";
 import { useEffect, useState, useMemo } from "react";
-// import socket from '../socket';
 
 export default function Chatroom() {
     const [chats, setChats] = useState<Chat[]>([])
@@ -51,17 +50,6 @@ export default function Chatroom() {
             socket.removeEventListener("message", handleMessage);
             socket.close();
         };
-
-        // Listen for the 'updateChats' event and update the state
-        // socket.on('updateChats', (newChat) => {
-        //     console.log(socket)
-        //     setChats((prevChats) => [...prevChats, newChat]);
-        // });
-
-        // Clean up the listener when the component is unmounted
-        // return () => {
-        //     socket.off('updateChats');
-        // };
     }, [])
 
     console.log(chats)

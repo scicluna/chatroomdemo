@@ -1,6 +1,5 @@
 import { useRef } from "react"
 import { useUser } from "./UserContext"
-// import socket from '../socket';
 
 export default function MessageBar({ socket }: any) {
     const message = useRef<HTMLInputElement>(null)
@@ -32,8 +31,6 @@ export default function MessageBar({ socket }: any) {
                     })
                 );
                 message.current.value = "";
-                // const newChat = await response.json();
-                // socket.emit('newChat', newChat);
             } else {
                 console.error("Error posting message:", response.status);
             }
