@@ -1,9 +1,13 @@
 import MessageBar from "./MessageBar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 // import socket from '../socket';
 
 export default function Chatroom() {
     const [chats, setChats] = useState<Chat[]>([])
+
+    const socket = useMemo(() => {
+        return new WebSocket("wss://voidchat.herokuapp.com/ws");
+    }, []);
 
     async function getChats() {
         const response = await fetch("https://voidchat.herokuapp.com/api/chat");
@@ -22,9 +26,6 @@ export default function Chatroom() {
             setChats(chat)
         }
         loadChats();
-
-        // Set up WebSocket connection
-        const socket = new WebSocket("wss://voidchat.herokuapp.com");
 
         // Connection opened
         socket.addEventListener("open", (event) => {
@@ -78,7 +79,7 @@ export default function Chatroom() {
                     )
                 })}
             </main>
-            <MessageBar />
+            <MessageBar socket={socket} />
         </>
     )
 }

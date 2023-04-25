@@ -2,7 +2,7 @@ import { useRef } from "react"
 import { useUser } from "./UserContext"
 // import socket from '../socket';
 
-export default function MessageBar() {
+export default function MessageBar({ socket }: any) {
     const message = useRef<HTMLInputElement>(null)
     const { user } = useUser()
 
@@ -22,8 +22,15 @@ export default function MessageBar() {
                     headers: { "Content-type": "application/json; charset=UTF-8" }
                 }
             )
+
             if (response.ok) {
                 // Clear the input field after a successful message post
+                socket.send(
+                    JSON.stringify({
+                        authorId: user.id,
+                        body: message.current.value,
+                    })
+                );
                 message.current.value = "";
                 // const newChat = await response.json();
                 // socket.emit('newChat', newChat);
