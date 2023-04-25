@@ -103,7 +103,7 @@ app.get("/api/chat", async (_req, res) => {
             },
             take: 100,
             orderBy: {
-                createdAt: 'desc'
+                createdAt: 'asc'
             }
         })
         res.send(chats)
