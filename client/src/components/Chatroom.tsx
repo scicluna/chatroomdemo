@@ -30,7 +30,7 @@ export default function Chatroom() {
 
         const setupWebSocket = () => {
             // Create a new WebSocket instance
-            socket = new WebSocket("your-websocket-url");
+            socket = new WebSocket("wss://voidchat.herokuapp.com/ws");
 
             // Connection opened
             socket.addEventListener("open", (event) => {
