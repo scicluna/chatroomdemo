@@ -14,7 +14,6 @@ passport.serializeUser((user: Express.User, done) => {
 passport.deserializeUser((user: Express.User, done) => {
     done(null, user);
 });
-
 passport.use(
     new GoogleStrategy(
         {
@@ -23,27 +22,37 @@ passport.use(
             callbackURL: "/auth/google/callback",
         },
         async (_accessToken, _refreshToken, profile, done) => {
-            if (!profile.emails) return new Error("Email not available from Google")
+            if (!profile.emails) return new Error("Email not available from Google");
 
-            const existingUser = await prisma.user.findUnique({ where: { email: profile.emails[0].value } });
+            const userEmail = profile.emails[0].value;
 
-            if (existingUser) {
-                const updatedUser = await prisma.user.update({
-                    where: { id: existingUser.id },
-                    data: { googleId: profile.id },
+            try {
+                const user = await prisma.$transaction(async (prisma) => {
+                    const existingUser = await prisma.user.findUnique({ where: { email: userEmail } });
+
+                    if (existingUser) {
+                        return await prisma.user.update({
+                            where: { id: existingUser.id },
+                            data: { googleId: profile.id },
+                        });
+                    } else {
+                        return await prisma.user.create({
+                            data: {
+                                googleId: profile.id,
+                                username: profile.displayName,
+                                email: userEmail,
+                            },
+                        });
+                    }
                 });
-                done(null, updatedUser);
-            } else {
-                const user = await prisma.user.upsert({
-                    where: { googleId: profile.id },
-                    update: { googleId: profile.id, username: profile.displayName, email: profile.emails[0].value },
-                    create: { googleId: profile.id, username: profile.displayName, email: profile.emails[0].value }
-                });
+
                 done(null, user);
+            } catch (error: any) {
+                done(error);
             }
         }
     )
-)
+);
 
 passport.use(
     new GitHubStrategy(
@@ -56,21 +65,31 @@ passport.use(
         async (_accessToken: string, _refreshToken: string, profile: GitHubProfile, done: (error: any, user?: any) => void) => {
             if (!profile.emails) return new Error("Email not available from GitHub");
 
-            const existingUser = await prisma.user.findUnique({ where: { email: profile.emails[0].value } });
+            const userEmail = profile.emails[0].value;
 
-            if (existingUser) {
-                const updatedUser = await prisma.user.update({
-                    where: { id: existingUser.id },
-                    data: { githubId: profile.id },
+            try {
+                const user = await prisma.$transaction(async (prisma) => {
+                    const existingUser = await prisma.user.findUnique({ where: { email: userEmail } });
+
+                    if (existingUser) {
+                        return await prisma.user.update({
+                            where: { id: existingUser.id },
+                            data: { githubId: profile.id },
+                        });
+                    } else {
+                        return await prisma.user.create({
+                            data: {
+                                githubId: profile.id,
+                                username: profile.displayName,
+                                email: userEmail,
+                            },
+                        });
+                    }
                 });
-                done(null, updatedUser);
-            } else {
-                const user = await prisma.user.upsert({
-                    where: { githubId: profile.id },
-                    update: { githubId: profile.id, username: profile.displayName, email: profile.emails[0].value },
-                    create: { githubId: profile.id, username: profile.displayName, email: profile.emails[0].value },
-                });
+
                 done(null, user);
+            } catch (error) {
+                done(error);
             }
         }
     )
