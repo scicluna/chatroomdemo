@@ -1,7 +1,6 @@
 import express from "express";
 import session from "express-session";
 import cors from "cors";
-import './socket.js';
 //Passport imports
 import passport from "passport";
 import "./passport-setup.js";
@@ -120,5 +119,18 @@ app.post("/api/chat", async (req, res) => {
 // Start express server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
+});
+const io = app;
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    // Listen for new chat events
+    socket.on('newChat', (chat) => {
+        console.log('newChat:', chat);
+        // Broadcast the new chat to all connected clients
+        io.emit('updateChats', chat);
+    });
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
 });
 //# sourceMappingURL=index.js.map
