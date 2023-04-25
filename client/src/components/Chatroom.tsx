@@ -6,18 +6,21 @@ export default function Chatroom() {
     const chatContainer = useRef<HTMLDivElement>(null)
     const lastMessage = useRef<HTMLDivElement>(null)
 
-    const isUserAtBottom = () => {
-        if (!chatContainer.current) return false;
-        const { scrollTop, scrollHeight, clientHeight } = chatContainer.current;
-        return scrollTop + clientHeight >= scrollHeight - 5;
-    };
-
     useEffect(() => {
-        if (chatContainer.current && lastMessage.current && isUserAtBottom()) {
-            chatContainer.current.scrollTo({
-                top: lastMessage.current.offsetTop,
-                behavior: "smooth",
-            });
+        if (!chatContainer.current) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = chatContainer.current;
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5;
+
+        console.log(isAtBottom)
+
+        if (isAtBottom) {
+            if (lastMessage.current) {
+                chatContainer.current.scrollTo({
+                    top: lastMessage.current.offsetTop,
+                    behavior: "smooth",
+                });
+            }
         }
     }, [chats]);
 
