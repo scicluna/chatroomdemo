@@ -20,37 +20,54 @@ export default function Chatroom() {
 
     useEffect(() => {
         async function loadChats() {
-            const chat = await getChats()
-            if (!chat) return
-            setChats(chat)
+            const chat = await getChats();
+            if (!chat) return;
+            setChats(chat);
         }
         loadChats();
 
-        // Connection opened
-        socket.addEventListener("open", (event) => {
-            console.log("WebSocket connection opened:", event);
-        });
+        const setupWebSocket = () => {
+            // Connection opened
+            socket.addEventListener("open", (event) => {
+                console.log("WebSocket connection opened:", event);
+            });
 
-        // Handle incoming messages
-        const handleMessage = (event: any) => {
-            console.log("WebSocket message received:", event);
-            const message = JSON.parse(event.data);
+            // Handle incoming messages
+            const handleMessage = (event: any) => {
+                console.log("WebSocket message received:", event);
+                const message = JSON.parse(event.data);
 
-            if (message.type === "NEW_CHAT") {
-                // Update the chats state with the new chat
-                setChats((prevChats) => [...prevChats, message.data]);
-            }
+                if (message.type === "NEW_CHAT") {
+                    // Update the chats state with the new chat
+                    setChats((prevChats) => [...prevChats, message.data]);
+                }
+            };
+
+            // Listen for messages
+            socket.addEventListener("message", handleMessage);
+
+            // Handle WebSocket disconnection
+            socket.addEventListener("close", (event) => {
+                console.log("WebSocket connection closed:", event);
+
+                // Remove the message event listener
+                socket.removeEventListener("message", handleMessage);
+
+                // Attempt to reconnect after a delay
+                setTimeout(() => {
+                    setupWebSocket();
+                }, 5000); // 5 seconds
+            });
         };
 
-        // Listen for messages
-        socket.addEventListener("message", handleMessage);
+        setupWebSocket();
 
         // Clean up the WebSocket connection and listeners when the component is unmounted
         return () => {
-            socket.removeEventListener("message", handleMessage);
             socket.close();
         };
-    }, [])
+    }, []);
+
 
     console.log(chats)
 
