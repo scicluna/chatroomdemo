@@ -26,7 +26,12 @@ export default function Chatroom() {
         }
         loadChats();
 
+        let socket: WebSocket;
+
         const setupWebSocket = () => {
+            // Create a new WebSocket instance
+            socket = new WebSocket("your-websocket-url");
+
             // Connection opened
             socket.addEventListener("open", (event) => {
                 console.log("WebSocket connection opened:", event);
@@ -64,9 +69,12 @@ export default function Chatroom() {
 
         // Clean up the WebSocket connection and listeners when the component is unmounted
         return () => {
-            socket.close();
+            if (socket) {
+                socket.close();
+            }
         };
     }, []);
+
 
 
     console.log(chats)
