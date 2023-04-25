@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../../../client/dist')));
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://voidchat.herokuapp.com/'],
+    origin: ['http://localhost:5173', 'https://voidchat.herokuapp.com/', 'http://voidchat.herokuapp.com/, voidchat.herokuapp.com/'],
     credentials: true,
     allowedHeaders: ['Content-Type']
 }))
