@@ -19,7 +19,6 @@ model User {
   chats    Chat[]
   signedUp DateTime @default(now())
 
-  @@unique([githubId, googleId])
   @@index([username])
 }
 
