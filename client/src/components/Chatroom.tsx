@@ -1,8 +1,25 @@
 import MessageBar from "./MessageBar";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 
 export default function Chatroom() {
     const [chats, setChats] = useState<Chat[]>([])
+    const chatContainer = useRef<HTMLDivElement>(null)
+    const lastMessage = useRef<HTMLDivElement>(null)
+
+    const isUserAtBottom = () => {
+        if (!chatContainer.current) return false;
+        const { scrollTop, scrollHeight, clientHeight } = chatContainer.current;
+        return scrollTop + clientHeight >= scrollHeight - 5;
+    };
+
+    useEffect(() => {
+        if (chatContainer.current && lastMessage.current && isUserAtBottom()) {
+            chatContainer.current.scrollTo({
+                top: lastMessage.current.offsetTop,
+                behavior: "smooth",
+            });
+        }
+    }, [chats]);
 
     const socket = useMemo(() => {
         return new WebSocket("wss://voidchat.herokuapp.com/ws");
@@ -75,16 +92,15 @@ export default function Chatroom() {
         };
     }, []);
 
-
-
     console.log(chats)
 
     return (
         <>
-            <main className="h-screen w-screen p-5 bg-zinc-800 text-lime-500 overflow-y-scroll">
+            <main className="h-screen w-screen p-5 bg-zinc-800 text-lime-500 overflow-y-scroll
+                scrollbar-none" ref={chatContainer} >
                 {chats.map((chat, i) => {
                     return (
-                        <div key={i} className="flex gap-5">
+                        <div key={i} className="flex gap-5" ref={i === chats.length - 1 ? lastMessage : null}>
                             <p>{chat.author?.username || 'Unknown'}:</p>
                             <p>{chat.body}</p>
                         </div>

@@ -100,6 +100,10 @@ app.get("/api/chat", async (_req, res) => {
         const chats = await prisma.chat.findMany({
             include: {
                 author: true,
+            },
+            take: 100,
+            orderBy: {
+                createdAt: 'desc'
             }
         })
         res.send(chats)

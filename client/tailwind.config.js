@@ -7,7 +7,9 @@ export default {
   ],
   darkMode: 'class',
   theme: {},
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar')
+  ],
   safelist: [{
     pattern: /(bg|text|border)/
   }]
