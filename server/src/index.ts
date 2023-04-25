@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import cors from "cors";
+import WebSocket from "ws"
 
 //Passport imports
 import passport from "passport";
@@ -121,29 +122,42 @@ app.post("/api/chat", async (req, res) => {
         })
         res.send(newChat)
         console.log(newChat)
+        broadcast({ type: "NEW_CHAT", data: newChat });
     } catch (err) {
         console.log(err)
     }
 })
 
+const wss = new WebSocket.Server({ noServer: true })
+
+// Broadcast function to send data to all connected clients
+function broadcast(data: any) {
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(data));
+        }
+    });
+}
+
+// Set up the WebSocket server connection handling
+wss.on("connection", (ws) => {
+    ws.on("message", (message) => {
+        console.log("Received: %s", message);
+    });
+
+    ws.on("close", () => {
+        console.log("Client disconnected");
+    });
+});
+
+
 // Start express server
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
-const io = app
-io.on('connection', (socket) => {
-    console.log('a user connected');
-
-    // Listen for new chat events
-    socket.on('newChat', (chat) => {
-        console.log('newChat:', chat);
-
-        // Broadcast the new chat to all connected clients
-        io.emit('updateChats', chat);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
+server.on("upgrade", (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit("connection", ws, request);
     });
 });

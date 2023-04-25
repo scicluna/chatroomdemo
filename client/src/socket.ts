@@ -1,10 +1,10 @@
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
-// const isProduction = process.env.NODE_ENV === "production";
-// // const socketURL = isProduction
-// //     ? "wss://voidchat.herokuapp.com"
-// //     : "ws://localhost:3001";
+// // const isProduction = process.env.NODE_ENV === "production";
+// // // const socketURL = isProduction
+// // //     ? "wss://voidchat.herokuapp.com"
+// // //     : "ws://localhost:3001";
 
-const socket = io("wss://voidchat.herokuapp.com");
+// const socket = io("wss://voidchat.herokuapp.com");
 
-export default socket;
+// export default socket;

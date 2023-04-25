@@ -1,6 +1,6 @@
 import MessageBar from "./MessageBar";
 import { useEffect, useState } from "react";
-import socket from '../socket';
+// import socket from '../socket';
 
 export default function Chatroom() {
     const [chats, setChats] = useState<Chat[]>([])
@@ -23,15 +23,44 @@ export default function Chatroom() {
         }
         loadChats();
 
-        // Listen for the 'updateChats' event and update the state
-        socket.on('updateChats', (newChat) => {
-            setChats((prevChats) => [...prevChats, newChat]);
+        // Set up WebSocket connection
+        const socket = new WebSocket("wss://voidchat.herokuapp.com");
+
+        // Connection opened
+        socket.addEventListener("open", (event) => {
+            console.log("WebSocket connection opened:", event);
         });
 
-        // Clean up the listener when the component is unmounted
-        return () => {
-            socket.off('updateChats');
+        // Handle incoming messages
+        const handleMessage = (event: any) => {
+            console.log("WebSocket message received:", event);
+            const message = JSON.parse(event.data);
+
+            if (message.type === "NEW_CHAT") {
+                // Update the chats state with the new chat
+                setChats((prevChats) => [...prevChats, message.data]);
+            }
         };
+
+        // Listen for messages
+        socket.addEventListener("message", handleMessage);
+
+        // Clean up the WebSocket connection and listeners when the component is unmounted
+        return () => {
+            socket.removeEventListener("message", handleMessage);
+            socket.close();
+        };
+
+        // Listen for the 'updateChats' event and update the state
+        // socket.on('updateChats', (newChat) => {
+        //     console.log(socket)
+        //     setChats((prevChats) => [...prevChats, newChat]);
+        // });
+
+        // Clean up the listener when the component is unmounted
+        // return () => {
+        //     socket.off('updateChats');
+        // };
     }, [])
 
     console.log(chats)
