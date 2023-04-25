@@ -38,7 +38,7 @@ passport.use(
                     } else {
                         return await prisma.user.create({
                             data: {
-                                googleId: profile.id,
+                                googleId: profile.id ? profile.id : null,
                                 username: profile.displayName,
                                 email: userEmail,
                             },
