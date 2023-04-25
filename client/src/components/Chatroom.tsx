@@ -10,8 +10,14 @@ export default function Chatroom() {
         if (!chatContainer.current) return;
 
         const { scrollTop, scrollHeight, clientHeight } = chatContainer.current;
-        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5;
+        const diff = scrollHeight - (scrollTop + clientHeight);
+        const threshold = 5;
+        const isAtBottom = diff <= threshold;
 
+        console.log('scroll height', scrollHeight)
+        console.log('scroll top', scrollTop)
+        console.log('client height', clientHeight)
+        console.log('diff', scrollHeight - (scrollTop + clientHeight))
         console.log(isAtBottom)
 
         if (isAtBottom) {
