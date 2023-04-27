@@ -32,10 +32,17 @@ app.use(cors({
     allowedHeaders: ['Content-Type']
 }))
 app.use(session({
-    secret: process.env.SESSION_SECRET as string,
+    secret: 'asdasdasdasdsad',
     resave: false,
-    saveUninitialized: false,
-}))
+    saveUninitialized: true,
+    cookie: {
+        secure: true, // Set to true for HTTPS connections
+        httpOnly: true,
+        domain: 'voidchat.herokuapp.com',
+        sameSite: 'none', // Set to 'lax', 'strict', or 'none'
+        maxAge: 86400000 // Cookie expiration in milliseconds ~4 hours
+    }
+}));
 
 //declare passports as middleware
 app.use(passport.initialize());
