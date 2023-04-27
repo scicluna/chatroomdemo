@@ -101,10 +101,10 @@ app.get("/api/chat", async (_req, res) => {
             include: {
                 author: true,
             },
-            skip: -100,
             orderBy: {
-                createdAt: 'asc'
-            }
+                createdAt: 'desc'
+            },
+            take: 100
         });
         res.send(chats);
     }
