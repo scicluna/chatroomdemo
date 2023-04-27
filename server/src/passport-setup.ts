@@ -14,6 +14,7 @@ passport.serializeUser((user: Express.User, done) => {
 passport.deserializeUser((user: Express.User, done) => {
     done(null, user);
 });
+
 passport.use(
     new GoogleStrategy(
         {

@@ -1,11 +1,18 @@
 import MessageBar from "./MessageBar";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Chatroom() {
+    //set state for chats list
     const [chats, setChats] = useState<Chat[]>([])
+
+    //html references
     const chatContainer = useRef<HTMLDivElement>(null)
     const lastMessage = useRef<HTMLDivElement>(null)
 
+    //webSocket ref
+    const socketRef = useRef<WebSocket | null>(null);
+
+    //useEffect to handle smooth mouse scrolling with new incoming chats.
     useEffect(() => {
         if (!chatContainer.current) return;
 
@@ -13,12 +20,6 @@ export default function Chatroom() {
         const diff = scrollHeight - (scrollTop + clientHeight);
         const threshold = 30;
         const isAtBottom = diff <= threshold;
-
-        console.log('scroll height', scrollHeight)
-        console.log('scroll top', scrollTop)
-        console.log('client height', clientHeight)
-        console.log('diff', scrollHeight - (scrollTop + clientHeight))
-        console.log(isAtBottom)
 
         if (isAtBottom) {
             if (lastMessage.current) {
@@ -30,10 +31,12 @@ export default function Chatroom() {
         }
     }, [chats]);
 
-    const socket = useMemo(() => {
-        return new WebSocket("wss://voidchat.herokuapp.com/ws");
-    }, []);
+    //establishing our websocket upon creation of the chatroom
+    // const socket = useMemo(() => {
+    //     return new WebSocket("wss://voidchat.herokuapp.com/ws");
+    // }, []);
 
+    //grabs our chats from mongoose
     async function getChats() {
         const response = await fetch("https://voidchat.herokuapp.com/api/chat");
         if (response.status === 200) {
@@ -44,7 +47,10 @@ export default function Chatroom() {
         }
     }
 
+    //primary useEffect logic for updating chats live
     useEffect(() => {
+
+        //async loadChats function to grab chats from mongoose and set the current state
         async function loadChats() {
             const chat = await getChats();
             if (!chat) return;
@@ -52,14 +58,13 @@ export default function Chatroom() {
         }
         loadChats();
 
-        let socket: WebSocket;
-
+        //handle settingup a new WebSocket
         const setupWebSocket = () => {
             // Create a new WebSocket instance
-            socket = new WebSocket("wss://voidchat.herokuapp.com/ws");
+            socketRef.current = new WebSocket("wss://voidchat.herokuapp.com/ws");
 
             // Connection opened
-            socket.addEventListener("open", (event) => {
+            socketRef.current.addEventListener("open", (event) => {
                 console.log("WebSocket connection opened:", event);
             });
 
@@ -68,6 +73,7 @@ export default function Chatroom() {
                 console.log("WebSocket message received:", event);
                 const message = JSON.parse(event.data);
 
+                //If message.type is "NEW_CHAT" then update the chats state to include the new message data.
                 if (message.type === "NEW_CHAT") {
                     // Update the chats state with the new chat
                     setChats((prevChats) => [...prevChats, message.data]);
@@ -75,49 +81,49 @@ export default function Chatroom() {
             };
 
             // Listen for messages
-            socket.addEventListener("message", handleMessage);
+            socketRef.current.addEventListener("message", handleMessage);
 
             // Handle WebSocket disconnection
-            socket.addEventListener("close", (event) => {
+            socketRef.current.addEventListener("close", (event) => {
                 console.log("WebSocket connection closed:", event);
 
                 // Remove the message event listener
-                socket.removeEventListener("message", handleMessage);
+                socketRef.current?.removeEventListener("message", handleMessage);
 
-                // Attempt to reconnect after a delay
+                // Attempt to reconnect after a delay keeping sessions mostly active
                 setTimeout(() => {
                     setupWebSocket();
                 }, 5000); // 5 seconds
             });
         };
 
+        //initially set up the webSocket
         setupWebSocket();
 
         // Clean up the WebSocket connection and listeners when the component is unmounted
         return () => {
-            if (socket) {
-                socket.close();
+            if (socketRef.current) {
+                socketRef.current.close();
             }
         };
     }, []);
 
-    console.log(chats)
-
+    //return jsx for the chatroom and message bar mapping the chats over our view
     return (
         <>
             <main className="h-screen w-screen p-5 bg-zinc-800 text-lime-500 overflow-y-scroll
                 scrollbar-none" ref={chatContainer} >
                 {chats.map((chat, i) => {
                     return (
+                        //handles our "lastMessage" ref tagging the most recent chat as "lastMessage"
                         <div key={i} className="flex gap-5" ref={i === chats.length - 1 ? lastMessage : null}>
                             <p>{chat.author?.username || 'Unknown'}:</p>
                             <p>{chat.body}</p>
                         </div>
-
                     )
                 })}
             </main>
-            <MessageBar socket={socket} />
+            <MessageBar socket={socketRef.current} />
         </>
     )
 }

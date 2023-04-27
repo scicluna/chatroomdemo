@@ -1,5 +1,6 @@
 import LoginButtons from "./LoginButtons";
 
+//Just a container for loginButtons
 export default function LoginScreen() {
     return (
         <main className="flex items-center justify-center h-screen w-screen bg-black">

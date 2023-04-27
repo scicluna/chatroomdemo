@@ -31,7 +31,7 @@ async function fetchCurrentUser() {
 export function UserProvider({ children }: UserProviderProps) {
     const [user, setUser] = useState<User | null>(null);
 
-    //initial fetch for our user
+    //initial fetch for our user -- basically, if a user already exists in the session, set that user to that user.
     useEffect(() => {
 
         async function loadCurrentUser() {

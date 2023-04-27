@@ -36,6 +36,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
 }))
+
 //declare passports as middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,7 +58,6 @@ app.get("/", (_req, res) => {
     res.sendFile(path.join(__dirname, '../../../client/dist/index.html'));
 });
 
-// API User Routes -- Migrate to another folder later
 // Fetch current user
 app.get("/api/user", (req, res) => {
     console.log('fetch user data')
@@ -84,6 +84,7 @@ app.post("/api/user", async (req, res) => {
     }
 })
 
+//destroys the current session on logout and redirects to the homepage
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -95,6 +96,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
+//finds the most recent 100 chats
 app.get("/api/chat", async (_req, res) => {
     try {
         const chats = await prisma.chat.findMany({
@@ -112,9 +114,10 @@ app.get("/api/chat", async (_req, res) => {
     }
 })
 
-// Post new chat -- Migrate later to a new folder
+// Post new chat
 app.post("/api/chat", async (req, res) => {
     try {
+        //build a new chat with prisma including the author
         const newChat = await prisma.chat.create({
             data: {
                 authorId: req.body.authorId,
@@ -125,13 +128,14 @@ app.post("/api/chat", async (req, res) => {
             }
         })
         res.send(newChat)
-        console.log(newChat)
+        //broadcast an object to all websockets called "NEW_CHAT" with the created prisma object as data.
         broadcast({ type: "NEW_CHAT", data: newChat });
     } catch (err) {
         console.log(err)
     }
 })
 
+//Establish web socket server (no server allows it to run on the same port as our express server)
 const wss = new WebSocketServer({ noServer: true });
 
 // Broadcast function to send data to all connected clients
@@ -144,6 +148,7 @@ function broadcast(data: any) {
 }
 
 // Set up the WebSocket server connection handling
+// Adds a connection listener to our web socket server
 wss.on("connection", (ws) => {
     ws.on("message", (message) => {
         console.log("Received: %s", message);
@@ -160,8 +165,9 @@ const server = app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
-server.on("upgrade", (request, socket, head) => {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-        wss.emit("connection", ws, request);
+
+server.on("upgrade", (request, socket, head) => { //listen for the upgrade event...
+    wss.handleUpgrade(request, socket, head, (ws) => { //handle upgrade from http to ws. The handleUpgrade method is responsible for handling the upgrade process, such as verifying the client's request, sending back the appropriate response, and establishing the WebSocket connection.  
+        wss.emit("connection", ws, request); //when upgrade is successful, emits a connection event (like from wss.on("connection"...))
     });
 });
