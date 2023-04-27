@@ -53,6 +53,16 @@ app.get("/auth/github/callback", passport.authenticate("github"), (_req, res) =>
     res.redirect('/');
 });
 
+// Middleware to enforce HTTPS on Heroku
+app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https' && process.env.NODE_ENV === 'production') {
+        res.redirect('https://' + req.headers.host + req.url);
+    } else {
+        next();
+    }
+});
+
+
 // Root Route
 app.get("/", (_req, res) => {
     res.sendFile(path.join(__dirname, '../../../client/dist/index.html'));
