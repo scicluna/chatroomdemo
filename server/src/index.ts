@@ -114,12 +114,12 @@ app.get("/api/chat", async (_req, res) => {
             include: {
                 author: true,
             },
-            take: -100,
+            skip: -100,
             orderBy: {
-                createdAt: 'desc'
+                createdAt: 'asc'
             }
         })
-        res.send(chats.reverse())
+        res.send(chats)
     } catch (err) {
         console.log(err)
     }
