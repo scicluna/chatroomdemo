@@ -119,7 +119,7 @@ app.get("/api/chat", async (_req, res) => {
             },
             take: 100
         })
-        res.send(chats)
+        res.send(chats.reverse())
     } catch (err) {
         console.log(err)
     }
