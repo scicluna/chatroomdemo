@@ -37,6 +37,15 @@ app.use(session({
     saveUninitialized: false,
 }))
 
+// Middleware to enforce HTTPS on Heroku
+app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https' && process.env.NODE_ENV === 'production') {
+        res.redirect('https://' + req.headers.host + req.url);
+    } else {
+        next();
+    }
+});
+
 //declare passports as middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,14 +62,6 @@ app.get("/auth/github/callback", passport.authenticate("github"), (_req, res) =>
     res.redirect('/');
 });
 
-// Middleware to enforce HTTPS on Heroku
-app.use((req, res, next) => {
-    if (req.headers['x-forwarded-proto'] !== 'https' && process.env.NODE_ENV === 'production') {
-        res.redirect('https://' + req.headers.host + req.url);
-    } else {
-        next();
-    }
-});
 
 
 // Root Route
