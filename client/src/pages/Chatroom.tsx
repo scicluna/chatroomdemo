@@ -1,6 +1,7 @@
 import MessageBar from "../components/MessageBar";
 import { useEffect, useState, useRef } from "react";
 import { Typewriter } from "react-simple-typewriter";
+import blackhole from "../../public/blackhole.jpg"
 
 const URL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
 const WS = window.location.origin.includes('local') ? 'ws://localhost:3000/ws' : "wss://voidchat.herokuapp.com/ws";
@@ -94,7 +95,7 @@ export default function Chatroom() {
                 // Attempt to reconnect after a delay keeping sessions mostly active
                 setTimeout(() => {
                     setupWebSocket();
-                }, 5000); // 5 seconds
+                }, 2000); // 2 seconds
             });
         };
 
@@ -113,7 +114,7 @@ export default function Chatroom() {
     return (
         <>
             <main className="h-screen w-screen p-5 bg-zinc-800 text-green-500 overflow-y-scroll
-                scrollbar-none" ref={chatContainer} >
+                scrollbar-none relative" style={{ backgroundImage: `url(${blackhole})`, backgroundPosition: 'center' }} ref={chatContainer} >
                 {chats.map((chat, i) => {
                     return (
                         //handles our "lastMessage" ref tagging the most recent chat as "lastMessage"

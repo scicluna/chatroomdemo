@@ -2,6 +2,7 @@ import { useUser } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
 import Chatroom from "./pages/Chatroom";
 import LoginScreen from "./pages/LoginScreen";
+import blackhole from '../public/blackhole.jpg'
 
 export default function App() {
   //grab user from userContext
@@ -12,7 +13,7 @@ export default function App() {
     <>
       {user ? (
         <>
-          <div className="flex flex-col h-screen w-screen">
+          <div className="flex flex-col h-screen w-screen" style={{ backgroundImage: `url(${blackhole})`, backgroundPosition: 'center' }}>
             <Navbar />
             <Chatroom />
           </div>
