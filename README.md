@@ -16,7 +16,7 @@
 
   ## Installation
 
-  npm run install -> npm run dev 
+  npm i in the root, client, and the server -> npm run dev 
 
   ## Usage
 
