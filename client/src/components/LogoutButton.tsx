@@ -1,4 +1,4 @@
-import { useUser } from "./UserContext"
+import { useUser } from "../contexts/UserContext"
 
 export default function LogoutButton() {
 
@@ -26,6 +26,6 @@ export default function LogoutButton() {
 
     //return logout button
     return (
-        <button className="text-lime-500 hover:text-lime-200" onClick={handleLogout}>Logout</button>
+        <button className="text-green-500 hover:text-green-200" onClick={handleLogout}>Logout</button>
     )
 }

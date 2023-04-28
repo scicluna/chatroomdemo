@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { useUser } from "./UserContext"
+import { useUser } from "../contexts/UserContext"
 
 const URL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
 
@@ -52,7 +52,7 @@ export default function MessageBar({ socket }: any) {
         <div className="bg-zinc-900 w-screen p-3">
             <form className="w-full flex justify-center">
                 <input className="w-5/6 text-lime-200 bg-zinc-500 opacity-50" ref={message} type="text" />
-                <button className=" text-lime-500 hover:text-lime-200 ml-2" type="submit" onClick={postMessage}>POST</button>
+                <button className=" text-green-500 hover:text-green-200 ml-2" type="submit" onClick={postMessage}>POST</button>
             </form>
         </div>
     )

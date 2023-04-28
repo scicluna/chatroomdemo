@@ -1,7 +1,7 @@
-import { useUser } from "./components/UserContext";
+import { useUser } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
-import Chatroom from "./components/Chatroom";
-import LoginScreen from "./components/LoginScreen";
+import Chatroom from "./pages/Chatroom";
+import LoginScreen from "./pages/LoginScreen";
 
 export default function App() {
   //grab user from userContext
