@@ -1,14 +1,16 @@
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const URL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
+
 export default function LoginButtons() {
     //change our current route to auth/google for authentication purposes
     const handleGoogleLogin = () => {
-        window.location.href = `https://voidchat.herokuapp.com/auth/google`;
+        window.location.href = `${URL}/auth/google`;
     };
     //change our current route to auth/github for authentication purposes
     const handleGitHubLogin = () => {
-        window.location.href = `http://voidchat.herokuapp.com/auth/github`;
+        window.location.href = `${URL}/auth/github`;
     };
 
     //return both login buttons

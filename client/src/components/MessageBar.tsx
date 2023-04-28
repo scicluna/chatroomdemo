@@ -1,6 +1,8 @@
 import { useRef } from "react"
 import { useUser } from "./UserContext"
 
+const URL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
+
 export default function MessageBar({ socket }: any) {
     //set message ref for submission use
     const message = useRef<HTMLInputElement>(null)
@@ -16,7 +18,7 @@ export default function MessageBar({ socket }: any) {
 
         //post request using the user context and the input value
         try {
-            const response = await fetch('https://voidchat.herokuapp.com/api/chat',
+            const response = await fetch(`${URL}/api/chat`,
                 {
                     method: 'POST',
                     body: JSON.stringify({

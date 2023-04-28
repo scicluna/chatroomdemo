@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 //declare userContext -- which is an object containing the user state and the set user function
 const UserContext = createContext<UserContextValue | null>(null);
 
+const URL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
 
 //custom hook that returns the userContext object
 export function useUser() {
@@ -15,7 +16,7 @@ export function useUser() {
 
 //fetches the current user or null
 async function fetchCurrentUser() {
-    const response = await fetch("https://voidchat.herokuapp.com/api/user", {
+    const response = await fetch(`${URL}/api/user`, {
         credentials: "include", // To include the session cookie
     });
 

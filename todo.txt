@@ -1,6 +1,10 @@
-ui second draft making it look crisp and clean
-    - secret scroll bar 
-    - when we're at the bottom lets follow it
-    - when we're not at the bottom lets not follow it
-    - limit fetches to like, the last 100 messages.
+ui - second draft
 
+opaque void swirl in back 
+darker green (not lime)
+typing animation when message comes in
+placeholder for text input
+new icon top left
+roboto font
+lower reconnect websocket time
+refactor components

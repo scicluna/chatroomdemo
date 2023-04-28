@@ -1,6 +1,9 @@
 import MessageBar from "./MessageBar";
 import { useEffect, useState, useRef } from "react";
 
+const URL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3000';
+const WS = window.location.origin.includes('local') ? 'ws://localhost:3000/ws' : "wss://voidchat.herokuapp.com/ws";
+
 export default function Chatroom() {
     //set state for chats list
     const [chats, setChats] = useState<Chat[]>([])
@@ -31,14 +34,9 @@ export default function Chatroom() {
         }
     }, [chats]);
 
-    //establishing our websocket upon creation of the chatroom
-    // const socket = useMemo(() => {
-    //     return new WebSocket("wss://voidchat.herokuapp.com/ws");
-    // }, []);
-
     //grabs our chats from mongoose
     async function getChats() {
-        const response = await fetch("https://voidchat.herokuapp.com/api/chat");
+        const response = await fetch(`${URL}/api/chat`);
         if (response.status === 200) {
             const chat = await response.json();
             return chat;
@@ -61,7 +59,9 @@ export default function Chatroom() {
         //handle settingup a new WebSocket
         const setupWebSocket = () => {
             // Create a new WebSocket instance
-            socketRef.current = new WebSocket("wss://voidchat.herokuapp.com/ws");
+            console.log('websocket is ', WS)
+            console.log(window.location.origin.includes('local'))
+            socketRef.current = new WebSocket(WS);
 
             // Connection opened
             socketRef.current.addEventListener("open", (event) => {

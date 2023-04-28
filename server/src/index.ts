@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../../../client/dist')));
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://voidchat.herokuapp.com', 'http://voidchat.herokuapp.com', 'voidchat.herokuapp.com'],
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://voidchat.herokuapp.com', 'http://voidchat.herokuapp.com', 'voidchat.herokuapp.com'],
     credentials: true,
     allowedHeaders: ['Content-Type']
 }))
@@ -170,12 +170,10 @@ wss.on("connection", (ws) => {
     });
 });
 
-
 // Start express server
 const server = app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
-
 
 server.on("upgrade", (request, socket, head) => { //listen for the upgrade event...
     wss.handleUpgrade(request, socket, head, (ws) => { //handle upgrade from http to ws. The handleUpgrade method is responsible for handling the upgrade process, such as verifying the client's request, sending back the appropriate response, and establishing the WebSocket connection.  
