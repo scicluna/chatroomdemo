@@ -49,7 +49,7 @@ export default function MessageBar({ socket }: any) {
 
     //simple jsx setup
     return (
-        <div className="w-screen p-3" style={{ backgroundColor: '#0000003d' }}>
+        <div className="w-screen p-3" style={{ backgroundColor: 'rgb(0 0 0 / 61%)' }}>
             <form className="w-full flex justify-center">
                 <input className="p-1 w-5/6 text-green-500" ref={message} type="text" style={{ backgroundColor: '#fafafa36' }} />
                 <button className=" text-green-500 hover:text-green-200 ml-2" type="submit" onClick={postMessage}>POST</button>

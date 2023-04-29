@@ -2,7 +2,7 @@ import { useUser } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
 import Chatroom from "./pages/Chatroom";
 import LoginScreen from "./pages/LoginScreen";
-import blackhole from '../public/blackhole.jpg'
+import blackhole from '../public/blackhole2.jpg'
 
 export default function App() {
   //grab user from userContext
