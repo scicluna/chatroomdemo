@@ -13,7 +13,7 @@ export default function App() {
     <>
       {user ? (
         <>
-          <div className="flex flex-col h-screen w-screen" style={{ backgroundImage: `url(${blackhole})`, backgroundPosition: 'center' }}>
+          <div className="flex flex-col h-screen w-screen" style={{ backgroundImage: `url(${blackhole})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
             <Navbar />
             <Chatroom />
           </div>
